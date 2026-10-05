@@ -1,18 +1,241 @@
 @import "tailwindcss";
 
-body {
-  background-color: #0B101E; 
-  color: #000;
+@theme {
+    --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --color-abyss: #060911;
+    --color-hull: #0b101e;
+    --color-panel: #101828;
+    --color-panel-2: #151d2c;
+    --color-edge: #1e293b;
+    --color-aqua: #22d3ee;
+    --color-aqua-soft: #67e8f9;
+
+    --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-fade-in: fade-in 0.9s ease-out both;
+    --animate-pulse-ring: pulse-ring 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+    --animate-sweep: sweep 14s linear infinite;
+    --animate-shimmer: shimmer 2.4s ease-in-out infinite;
+
+    @keyframes fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.55);
+            opacity: 0.85;
+        }
+
+        75%,
+        100% {
+            transform: scale(2.8);
+            opacity: 0;
+        }
+    }
+
+    @keyframes sweep {
+        from {
+            transform: translateX(-30%);
+        }
+
+        to {
+            transform: translateX(130%);
+        }
+    }
+
+    @keyframes shimmer {
+        0%,
+        100% {
+            opacity: 0.35;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
 }
 
-.map-wrapper {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 300px;
+@layer base {
+    html {
+        color-scheme: dark;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100dvh;
+        background-color: var(--color-abyss);
+        color: #cbd5e1;
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    ::selection {
+        background-color: color-mix(in oklab, var(--color-aqua, #22d3ee) 35%, transparent);
+        color: #f8fafc;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0a0f1c;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #1f2a3d;
+        border: 2px solid #0a0f1c;
+        border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #2b3a55;
+    }
 }
 
-.map-wrapper .leaflet-container {
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
+@utility text-balance-tight {
+    text-wrap: balance;
+}
+
+/* ---------- Superficie acristalada reutilizable ---------- */
+@utility glass-panel {
+    background-image: linear-gradient(160deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015) 42%, rgb(255 255 255 / 0));
+    background-color: color-mix(in oklab, var(--color-panel-2) 82%, transparent);
+    border: 1px solid rgb(148 163 184 / 0.12);
+    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.9), inset 0 1px 0 0 rgb(255 255 255 / 0.05);
+    backdrop-filter: blur(12px);
+}
+
+@utility grid-haze {
+    background-image:
+        radial-gradient(60rem 32rem at 12% -10%, rgb(34 211 238 / 0.1), transparent 60%),
+        radial-gradient(48rem 28rem at 92% 0%, rgb(59 130 246 / 0.1), transparent 55%),
+        linear-gradient(rgb(148 163 184 / 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(148 163 184 / 0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
+}
+
+/* ---------- Marcador del sensor ---------- */
+.sensor-marker {
+    background: transparent !important;
+    border: 0 !important;
+}
+
+.sensor-marker__pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgb(34 211 238 / 0.55), transparent 70%);
+    animation: pulse-ring 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.sensor-marker__core {
+    position: absolute;
+    inset: 13px;
+    border-radius: 9999px;
+    background: #22d3ee;
+    box-shadow: 0 0 0 4px rgb(6 11 22 / 0.9), 0 0 18px 4px rgb(34 211 238 / 0.7);
+}
+
+/* ---------- Leaflet en modo oscuro ---------- */
+.leaflet-container {
+    background: #080d18;
+    font-family: var(--font-sans);
+    outline: none;
+}
+
+/* Leaflet pone los controles arriba a la izquierda; los llevamos a la derecha
+   para no chocar con los chips de estado del dashboard. */
+.leaflet-top.leaflet-left {
+    left: auto;
+    right: 0;
+}
+
+.leaflet-left .leaflet-control {
+    margin-left: 12px;
+}
+
+.leaflet-control-zoom {
+    border: 1px solid rgb(148 163 184 / 0.18) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -14px rgb(0 0 0 / 0.95) !important;
+}
+
+.leaflet-control-zoom a {
+    width: 30px !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    color: #cbd5e1 !important;
+    background: rgb(13 19 33 / 0.92) !important;
+    border-bottom-color: rgb(148 163 184 / 0.16) !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.leaflet-control-zoom a:hover {
+    background: rgb(34 211 238 / 0.16) !important;
+    color: #67e8f9 !important;
+}
+
+.leaflet-control-attribution {
+    background: rgb(6 11 22 / 0.7) !important;
+    color: rgb(148 163 184 / 0.7) !important;
+    font-size: 10px !important;
+    border-top-left-radius: 8px;
+    backdrop-filter: blur(4px);
+}
+
+.leaflet-control-attribution a {
+    color: rgb(103 232 249 / 0.85) !important;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: rgb(13 19 33 / 0.97) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgb(148 163 184 / 0.18);
+    box-shadow: 0 24px 50px -20px rgb(0 0 0 / 0.95) !important;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 16px !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: 234px !important;
+    line-height: 1.5 !important;
+}
+
+.leaflet-popup-close-button {
+    color: rgb(148 163 184 / 0.7) !important;
+    padding: 8px 8px 0 0 !important;
+}
+
+.leaflet-popup-close-button:hover {
+    color: #f8fafc !important;
 }
