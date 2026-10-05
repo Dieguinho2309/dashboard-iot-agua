@@ -1,25 +1,31 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { mockSensor } from '../data/sensors';
+import { node } from '../data/sensors';
 
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+const position = [node.lat, node.lng];
 
-let DefaultIcon = L.icon({
-    iconUrl: markerIcon,
-    iconRetinaUrl: markerIcon2x,
-    shadowUrl: markerShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+const nodeMarker = L.divIcon({
+    className: 'node-marker',
+    html: '<span></span>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
 });
 
-L.Marker.prototype.options.icon = DefaultIcon;
+export default function MapView() {
+    return (
+        <MapContainer center={position} zoom={16} scrollWheelZoom className="h-full w-full">
+            <TileLayer
+                attribution='&copy; <a href="https://www.esri.com/">Esri</a> · HERE · Garmin · &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+                maxNativeZoom={16}
+            />
 
-export default function MapView(){
-    return(
-        <div className='w-full '></div>
-    )
+            <Marker position={position} icon={nodeMarker}>
+                <Popup>
+                    <p className="text-sm font-semibold text-white">{node.name}</p>
+                    <p className="mt-0.5 text-xs text-slate-400">{node.place}</p>
+                </Popup>
+            </Marker>
+        </MapContainer>
+    );
 }
