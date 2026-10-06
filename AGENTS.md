@@ -5,15 +5,6 @@ Autor: Diego Ovalle - Repo: github.com/Dieguinho2309/dashboard-iot-agua
 
 ---
 
-## Como trabajar con este usuario
-
-- Habla y escribe en espa?ol. Responde siempre en espa?ol, incluidos comentarios de codigo, mensajes de commit y documentacion.
-- Esta aprendiendo backend y frontend a la vez. Quiere entender el "por que" de cada decision, no solo recibir el arreglo.
-- Quiere escribir el codigo el mismo. Dale estructura, nombres de archivo, contrato y pistas.
-- Verifica antes de afirmar: npm run lint, npm run build y captura con Chrome headless.
-- Cero efecto IA en el diseno: sin glassmorphism, halos, iconos en tarjetas, animaciones de entrada ni hovers sin funcion.
-
----
 
 ## Stack
 
