@@ -1,9 +1,12 @@
 export const node = {
     id: "esp32-01",
     name: "Prototipo Estanque Universitario",
+    shortName: "Nodo ESP32",
     place: "Universidad del Magdalena",
     lat: 11.22418,
-    lng: -74.18542
+    lng: -74.18542,
+    uptime: "12 d 04 h",
+    firmware: "v1.4.2"
 };
 
 /**
