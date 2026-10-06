@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import MapView from "./components/MapView";
 import { SensorCard } from "./components/SensorCard";
+import Footer from "./components/Footer";
 import { sensorConfig, simulation, nextReading } from "./data/sensors";
 
 const keys = Object.keys(sensorConfig);
@@ -34,7 +35,7 @@ export default function App() {
             <div className="flex min-w-0 flex-1 flex-col">
                 <Header onMenu={() => setMenuOpen(true)} />
 
-                <main className="flex-1 p-4 sm:p-6">
+                <main className="flex flex-1 flex-col gap-5 p-4 sm:p-6">
                     <div className="grid gap-5 xl:grid-cols-12">
                         <div className="h-[420px] overflow-hidden rounded-lg border border-slate-800 sm:h-[500px] xl:col-span-8">
                             <MapView />
@@ -52,6 +53,8 @@ export default function App() {
                             ))}
                         </div>
                     </div>
+
+                    <Footer />
                 </main>
             </div>
         </div>

@@ -98,3 +98,12 @@ export function ClockIcon(props) {
         </Svg>
     );
 }
+
+export function GraduationIcon(props) {
+    return (
+        <Svg {...props}>
+            <path d="M12 3.5 22 8l-10 4.5L2 8Z" />
+            <path d="M6.5 10.2v4.6c0 1.7 2.5 3.2 5.5 3.2s5.5-1.5 5.5-3.2v-4.6" />
+        </Svg>
+    );
+}
