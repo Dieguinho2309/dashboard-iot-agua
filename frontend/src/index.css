@@ -1,75 +1,77 @@
 @import "tailwindcss";
 
 body {
-    background-color: #0b101e;
-    color: #cbd5e1;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background-color: #0b101e;
+  color: #e2e8f0;
+  margin: 0;
 }
 
-/* --- Marcador del nodo --- */
-.node-marker {
-    background: transparent;
-    border: 0;
+@keyframes wave-shift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.node-marker span {
-    display: block;
-    width: 14px;
-    height: 14px;
-    border-radius: 9999px;
-    background: #22d3ee;
-    box-shadow: 0 0 0 3px #0b101e, 0 0 0 4px #22d3ee;
+.wave-layer {
+  animation: wave-shift linear infinite;
 }
 
-/* --- Leaflet en modo oscuro --- */
-.leaflet-container {
-    background: #080d18;
-    font-family: inherit;
+@media (prefers-reduced-motion: reduce) {
+  .wave-layer {
+    animation: none;
+  }
 }
 
-.leaflet-control-zoom {
-    border: 1px solid rgb(148 163 184 / 0.2);
-    border-radius: 8px;
-    overflow: hidden;
+.pulse-marker {
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #22d3ee;
+  box-shadow: 0 0 0 3px rgba(11, 16, 30, 0.9);
 }
 
-.leaflet-control-zoom a {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    color: #cbd5e1;
-    background: #0f172a;
-    border-bottom-color: rgb(148 163 184 / 0.2);
+.pulse-marker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: #22d3ee;
+  animation: pulse-ring 2s ease-out infinite;
 }
 
-.leaflet-control-zoom a:hover {
-    background: #1e293b;
-    color: #ffffff;
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
 }
 
-.leaflet-control-attribution {
-    background: rgb(11 16 30 / 0.75);
-    color: rgb(148 163 184 / 0.75);
-    font-size: 10px;
+@media (prefers-reduced-motion: reduce) {
+  .pulse-marker::after {
+    animation: none;
+  }
 }
 
-.leaflet-control-attribution a {
-    color: #67e8f9;
+.maplibregl-popup-content {
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-    background: #0f172a;
-    color: #e2e8f0;
-    border: 1px solid rgb(148 163 184 / 0.2);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.9);
-}
-
-.leaflet-popup-content {
-    margin: 12px 14px;
-    line-height: 1.5;
-}
-
-.leaflet-popup-close-button {
-    color: rgb(148 163 184 / 0.7);
+.maplibregl-popup-close-button {
+  color: #94a3b8;
 }

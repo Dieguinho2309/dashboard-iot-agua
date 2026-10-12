@@ -79,3 +79,21 @@ export function evaluate(key, value) {
         bandWidth: ((high - low) / span) * 100
     };
 }
+
+/**
+ * Escala de color del pH (V2): rojo en los extremos, verde en el rango optimo.
+ * Se usa para pintar el sparkline por valor.
+ */
+const PH_SCALE = [
+    { value: 6.5, color: "#ef4444" },
+    { value: 6.8, color: "#f97316" },
+    { value: 7.0, color: "#10b981" },
+    { value: 7.6, color: "#10b981" },
+    { value: 7.8, color: "#f97316" },
+    { value: 8.5, color: "#ef4444" }
+];
+
+/** Stops de color (valor -> color) para el sparkline. Solo pH tiene degradado. */
+export function colorStops(key) {
+    return key === "ph" ? PH_SCALE : null;
+}

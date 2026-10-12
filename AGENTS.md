@@ -13,10 +13,12 @@ Autor: Diego Ovalle - Repo: github.com/Dieguinho2309/dashboard-iot-agua
 | UI | React / React DOM | 19.2.8 |
 | Build | Vite | 8.2.2 |
 | Estilos | Tailwind CSS v4 | 4.3.3 |
-| Mapas | Leaflet + react-leaflet | 1.9.4 / 5.0.0 |
+| Mapas | MapLibre GL + OpenFreeMap | 6.14.0 |
+| Fuentes | @fontsource/inter | 5.x |
 | Lint | ESLint | 10.9.0 |
 | Runtime | Node | v24.19.0 (npm 11.17.0) |
-| BD futura | node:sqlite | nativo, sin dependencias |
+| BD | PostgreSQL | 16 (Docker) |
+| Driver BD | pg (node-postgres) | 8.x |
 
 ---
 
@@ -35,9 +37,9 @@ No hay tests. Se esperan hasta conectar el ESP32.
 ## Estado
 
 - Lecturas simuladas (Math.random) en frontend/src/data/sensors.js:nextReading()
-- Sin backend
+- Backend: API modular en backend/ (Postgres 16 en Docker)
 - ESP32 sin conectar
-- Mapa: Esri Canvas/World_Dark_Gray_Base (CARTO devolvia tiles vacios)
+- Mapa: MapLibre GL (look L3, toggle claro/oscuro) + OpenFreeMap, todo en frontend/src/components/MapView.jsx
 - Historial: 24 puntos x 3s = ~72 segundos
 - Footer: "Datos simulados - prototipo academico"
 
@@ -56,15 +58,19 @@ No hay tests. Se esperan hasta conectar el ESP32.
 ## Backend plan
 
 Arquitectura modular 3 capas: routes/service/repository.
-Endpoints: POST /api/readings, GET /api/latest, GET /api/history
-Fases: 1) sqlite sin HTTP -> 2) capas -> 3) endpoints -> 4) proxy+fetch -> 5) ESP32 HTTPClient -> 6) estados loading/error
+Endpoints: POST /api/readings, GET /api/latest, GET /api/history (+ GET /api/health, POST /api/chat)
+Fases: 1) Postgres + migraciones -> 2) capas -> 3) endpoints -> 4) proxy+fetch -> 5) ESP32 HTTPClient -> 6) estados loading/error
 
-Importante: PRAGMA journal_mode = WAL. Separar recorded_at y received_at.
+BD: PostgreSQL 16 en Docker. Modelo normalizado nodes/sensors/readings/sensor_values.
+Migraciones en backend/src/db/migrations (runner: npm run db:migrate).
+Separar recorded_at (hora ESP32) y received_at (hora servidor).
 
 ---
 
 ## Notas rapidas
 
+- Paginas en frontend/src/Pages/; worker MapLibre en frontend/src/lib/maplibre.js
+- Code-splitting: React.lazy de Dashboard y MapView; maplibre-gl solo carga en /dashboard
 - git branch -vv NO dice ramas remotas; usar git ls-remote --heads origin
 - glob que solo busca md/jsx/css no ve .svg/.png
 - PowerShell 5.1 distorsiona caracteres no-ASCII; evita cadenas con acentos

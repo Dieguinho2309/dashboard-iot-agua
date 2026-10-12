@@ -1,5 +1,5 @@
 import Sparkline from "./Sparkline";
-import { evaluate } from "../data/sensors";
+import { evaluate, colorStops } from "../data/sensors";
 
 function DeltaArrow({ up }) {
     return (
@@ -43,7 +43,7 @@ export function SensorCard({ sensorKey, sensor, value, history }) {
             </div>
 
             <div className="mt-2">
-                <Sparkline data={history} color={sensor.color} />
+                <Sparkline data={history} color={sensor.color} stops={colorStops(sensorKey)} />
             </div>
 
             <div className="relative h-1.5 rounded bg-slate-800">

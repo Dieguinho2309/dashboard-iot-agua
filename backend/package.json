@@ -1,0 +1,16 @@
+{
+  "name": "backend-aquamagdalena",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "db:migrate": "node src/db/migrate.js",
+    "seed": "node src/scripts/seed.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.6",
+    "pg": "^8.23.1"
+  }
+}

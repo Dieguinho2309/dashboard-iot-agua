@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MenuIcon, ActivityIcon, ShieldIcon, ClockIcon } from "./Icons";
+import { MenuIcon, ActivityIcon, ClockIcon } from "./Icons";
 
 function useClock() {
     const [now, setNow] = useState(() => new Date());
@@ -38,11 +38,7 @@ export default function Header({ onMenu }) {
             <div className="hidden items-center gap-2 md:flex">
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-300">
                     <ActivityIcon className="size-3.5" />
-                    Sistema activo
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-slate-700 px-3 py-1.5 text-[11px] font-medium text-slate-300">
-                    <ShieldIcon className="size-3.5 text-cyan-300" />
-                    Seguro
+                    Sistema activo  
                 </span>
             </div>
 

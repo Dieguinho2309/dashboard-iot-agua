@@ -1,62 +1,29 @@
-import { useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
-import MapView from "./components/MapView";
-import { SensorCard } from "./components/SensorCard";
-import Footer from "./components/Footer";
-import { sensorConfig, simulation, nextReading } from "./data/sensors";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import Landing from "./Pages/Landing";
+import NotFound from "./Pages/404";
 
-const keys = Object.keys(sensorConfig);
+// El dashboard (y su mapa con maplibre) se carga aparte, solo al entrar.
+const Dashboard = lazy(() => import("./Pages/Dashboard"));
 
-function buildHistory() {
-    return Object.fromEntries(keys.map((key) => [key, Array.from({ length: simulation.historyPoints }, () => nextReading(key))]));
+function RouteFallback() {
+    return (
+        <div className="grid min-h-dvh place-items-center bg-[#0b101e] text-sm text-slate-400">
+            Cargando...
+        </div>
+    );
 }
 
 export default function App() {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [readings, setReadings] = useState(() => Object.fromEntries(keys.map((key) => [key, nextReading(key)])));
-    const [history, setHistory] = useState(buildHistory);
-
-    useEffect(() => {
-        const id = setInterval(() => {
-            const next = Object.fromEntries(keys.map((key) => [key, nextReading(key)]));
-
-            setReadings(next);
-            setHistory((prev) => Object.fromEntries(keys.map((key) => [key, [...prev[key].slice(1), next[key]]])));
-        }, simulation.intervalMs);
-
-        return () => clearInterval(id);
-    }, []);
-
     return (
-        <div className="flex min-h-dvh bg-[#0b101e] text-slate-300">
-            <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
-
-            <div className="flex min-w-0 flex-1 flex-col">
-                <Header onMenu={() => setMenuOpen(true)} />
-
-                <main className="flex flex-1 flex-col gap-5 p-4 sm:p-6">
-                    <div className="grid gap-5 xl:grid-cols-12">
-                        <div className="h-[420px] overflow-hidden rounded-lg border border-slate-800 sm:h-[500px] xl:col-span-8">
-                            <MapView />
-                        </div>
-
-                        <div className="flex flex-col gap-4 xl:col-span-4">
-                            {keys.map((key) => (
-                                <SensorCard
-                                    key={key}
-                                    sensorKey={key}
-                                    sensor={sensorConfig[key]}
-                                    value={readings[key]}
-                                    history={history[key]}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <Footer />
-                </main>
-            </div>
-        </div>
+        <BrowserRouter>
+            <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Suspense>
+        </BrowserRouter>
     );
 }
