@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon, ClockIcon, ShieldIcon } from "./Icons";
 import { node } from "../data/sensors";
 import { isMock } from "../lib/api";
@@ -41,14 +41,21 @@ export default function Sidebar({ open, onClose, live }) {
                 }`}
             >
                 <div className="flex items-center gap-3 px-5 py-5">
-                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-linear-to-br from-cyan-400 to-blue-600 text-white">
-                        <WavesIcon className="size-5" />
-                    </span>
+                    <Link
+                        to="/"
+                        onClick={onClose}
+                        aria-label="AquaMagdalena · ir al inicio"
+                        className="flex min-w-0 flex-1 items-center gap-3 rounded-lg transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+                    >
+                        <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-linear-to-br from-cyan-400 to-blue-600 text-white">
+                            <WavesIcon className="size-5" />
+                        </span>
 
-                    <div className="min-w-0 flex-1">
-                        <p className="truncate text-[15px] leading-tight font-bold text-white">AquaMagdalena</p>
-                        <p className="truncate text-[11px] text-slate-400">Calidad del agua · IoT</p>
-                    </div>
+                        <div className="min-w-0 flex-1">
+                            <p className="truncate text-[15px] leading-tight font-bold text-white">AquaMagdalena</p>
+                            <p className="truncate text-[11px] text-slate-400">Calidad del agua · IoT</p>
+                        </div>
+                    </Link>
 
                     <button
                         type="button"
