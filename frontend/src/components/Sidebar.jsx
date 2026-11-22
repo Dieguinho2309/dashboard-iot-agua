@@ -1,9 +1,13 @@
-import { Link } from "react-router";
-import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon } from "./Icons";
+import { NavLink } from "react-router";
+import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon, ClockIcon, ShieldIcon } from "./Icons";
 import { node } from "../data/sensors";
 import { isMock } from "../lib/api";
 
-const navItems = [{ label: "Panel Principal", icon: LayoutIcon, active: true }];
+const navItems = [
+    { label: "Panel Principal", to: "/dashboard", icon: LayoutIcon },
+    { label: "Historial", to: "/historial", icon: ClockIcon },
+    { label: "Alertas", to: "/alertas", icon: ShieldIcon }
+];
 
 export default function Sidebar({ open, onClose, live }) {
     const online = !isMock && live;
@@ -46,20 +50,27 @@ export default function Sidebar({ open, onClose, live }) {
                 <p className="px-5 pb-2 text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase">Navegación</p>
 
                 <nav className="flex-1 space-y-1 overflow-y-auto px-3">
-                    {navItems.map(({ label, icon: Icon, active }) => (
-                        <Link
-                            key={label}
-                            to="/dashboard"
+                    {navItems.map(({ label, to, icon: Icon }) => (
+                        <NavLink
+                            key={to}
+                            to={to}
                             onClick={onClose}
-                            aria-current={active ? "page" : undefined}
-                            className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
-                                active ? "bg-cyan-500/15 text-cyan-200" : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                            }`}
+                            className={({ isActive }) =>
+                                `relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
+                                    isActive
+                                        ? "bg-cyan-500/15 text-cyan-200"
+                                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                                }`
+                            }
                         >
-                            {active && <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-cyan-400" />}
-                            <Icon className={`size-5 shrink-0 ${active ? "text-cyan-300" : "text-slate-400"}`} />
-                            {label}
-                        </Link>
+                            {({ isActive }) => (
+                                <>
+                                    {isActive && <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-cyan-400" />}
+                                    <Icon className={`size-5 shrink-0 ${isActive ? "text-cyan-300" : "text-slate-400"}`} />
+                                    {label}
+                                </>
+                            )}
+                        </NavLink>
                     ))}
                 </nav>
 

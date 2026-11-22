@@ -3,8 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Landing from "./Pages/Landing";
 import NotFound from "./Pages/404";
 
-// El dashboard (y su mapa con maplibre) se carga aparte, solo al entrar.
+// Cada pagina pesada se carga aparte; el mapa solo entra con el dashboard.
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
+const Historial = lazy(() => import("./Pages/Historial"));
+const Alertas = lazy(() => import("./Pages/Alertas"));
 
 function RouteFallback() {
     return (
@@ -21,6 +23,8 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<Landing />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/historial" element={<Historial />} />
+                    <Route path="/alertas" element={<Alertas />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Suspense>
