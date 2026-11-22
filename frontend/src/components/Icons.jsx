@@ -25,6 +25,16 @@ export function WavesIcon(props) {
     );
 }
 
+export function HomeIcon(props) {
+    return (
+        <Svg {...props}>
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5.5 9.5V21h13V9.5" />
+            <path d="M9.5 21v-6h5v6" />
+        </Svg>
+    );
+}
+
 export function LayoutIcon(props) {
     return (
         <Svg {...props}>

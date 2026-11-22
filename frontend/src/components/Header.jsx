@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { MenuIcon, ActivityIcon, ClockIcon } from "./Icons";
+import { Link } from "react-router";
+import { MenuIcon, ActivityIcon, ClockIcon, HomeIcon } from "./Icons";
 import { isMock } from "../lib/api";
 
 function useClock() {
@@ -39,6 +40,15 @@ export default function Header({ onMenu, live, status, error }) {
             >
                 <MenuIcon className="size-5" />
             </button>
+
+            <Link
+                to="/"
+                aria-label="Ir al inicio"
+                title="Ir al inicio"
+                className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
+            >
+                <HomeIcon className="size-4" />
+            </Link>
 
             <div className="min-w-0 flex-1">
                 <h1 className="truncate text-[15px] leading-tight font-bold text-white sm:text-lg">

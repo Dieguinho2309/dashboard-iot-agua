@@ -42,9 +42,9 @@ export default function Sidebar({ open, onClose, live }) {
             >
                 <div className="flex items-center gap-3 px-5 py-5">
                     <Link
-                        to="/"
+                        to="/dashboard"
                         onClick={onClose}
-                        aria-label="AquaMagdalena · ir al inicio"
+                        aria-label="AquaMagdalena · ir al panel principal"
                         className="flex min-w-0 flex-1 items-center gap-3 rounded-lg transition hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-400"
                     >
                         <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-linear-to-br from-cyan-400 to-blue-600 text-white">
