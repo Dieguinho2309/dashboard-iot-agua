@@ -65,6 +65,6 @@ export async function getLatest(nodeId) {
   return repository.findLatest(nodeId)
 }
 
-export async function getHistory(nodeId, limit) {
-  return repository.findHistory(nodeId, limit)
+export async function getHistory(nodeId, limit, hours) {
+  return repository.findHistory(nodeId, limit, hours)
 }

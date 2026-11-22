@@ -55,16 +55,17 @@ export async function findLatest(nodeId) {
   return rows[0] ?? null
 }
 
-export async function findHistory(nodeId, limit) {
+export async function findHistory(nodeId, limit, hours) {
   const { rows } = await getPool().query(
     `SELECT r.recorded_at, json_object_agg(sv.sensor_key, sv.value) AS values
      FROM readings r
      JOIN sensor_values sv ON sv.reading_id = r.id
      WHERE ($1::text IS NULL OR r.node_id = $1)
+       AND ($3::int IS NULL OR r.recorded_at >= NOW() - ($3::int * INTERVAL '1 hour'))
      GROUP BY r.id
      ORDER BY r.recorded_at DESC
      LIMIT $2`,
-    [nodeId, limit]
+    [nodeId, limit, hours]
   )
   return rows.reverse()
 }

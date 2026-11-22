@@ -33,7 +33,9 @@ readingsRouter.get('/history', async (req, res, next) => {
   try {
     const requested = Number(req.query.limit)
     const limit = Number.isInteger(requested) && requested > 0 ? Math.min(requested, 200) : 24
-    res.json({ readings: await getHistory(nodeIdFrom(req), limit) })
+    const requestedHours = Number(req.query.hours)
+    const hours = Number.isInteger(requestedHours) && requestedHours > 0 ? Math.min(requestedHours, 168) : null
+    res.json({ readings: await getHistory(nodeIdFrom(req), limit, hours) })
   } catch (err) {
     next(err)
   }
