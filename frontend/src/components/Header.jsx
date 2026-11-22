@@ -17,10 +17,10 @@ export default function Header({ onMenu, live, status, error }) {
     const now = useClock();
     const mode = isMock ? "mock" : live ? "live" : status === "error" ? "error" : "connecting";
     const badge = {
-        mock: { label: "Modo simulado", tone: "amber" },
-        live: { label: "Sistema activo", tone: "emerald" },
-        error: { label: "Sin conexion", tone: "rose" },
-        connecting: { label: "Conectando", tone: "slate" }
+        mock: { label: "Modo simulado", short: "Sim", tone: "amber" },
+        live: { label: "Sistema activo", short: "Live", tone: "emerald" },
+        error: { label: "Sin conexion", short: "Error", tone: "rose" },
+        connecting: { label: "Conectando", short: "...", tone: "slate" }
     }[mode];
     const tones = {
         amber: "border-amber-500/30 bg-amber-500/10 text-amber-300",
@@ -48,6 +48,16 @@ export default function Header({ onMenu, live, status, error }) {
                     Monitoreo de la calidad del agua en tiempo real
                 </p>
             </div>
+
+            <span
+                role="status"
+                aria-label={badge.label}
+                title={error ?? badge.label}
+                className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-semibold md:hidden ${tones[badge.tone]}`}
+            >
+                <ActivityIcon className="size-3" />
+                {badge.short}
+            </span>
 
             <div className="hidden items-center gap-2 md:flex">
                 <span

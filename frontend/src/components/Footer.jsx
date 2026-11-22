@@ -1,7 +1,14 @@
 import { WavesIcon, GraduationIcon } from "./Icons";
 import { node } from "../data/sensors";
+import { isMock } from "../lib/api";
 
-export default function Footer() {
+export default function Footer({ status }) {
+    const dataLabel = isMock
+        ? "Datos simulados · prototipo académico"
+        : status === "ok"
+          ? "Datos en vivo · nodo conectado"
+          : "Sin conexión · últimos datos disponibles";
+
     return (
         <footer className="mt-auto flex flex-col items-center justify-between gap-3 border-t border-slate-800 px-1 pt-5 pb-6 text-[11px] text-slate-400 sm:flex-row">
             <p className="flex items-center gap-2">
@@ -14,7 +21,7 @@ export default function Footer() {
                 {node.place} · Diego Ovalle
             </p>
 
-            <p className="font-mono text-slate-400">Datos simulados · prototipo académico</p>
+            <p className="font-mono text-slate-400">{dataLabel}</p>
         </footer>
     );
 }

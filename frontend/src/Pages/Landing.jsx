@@ -13,6 +13,8 @@ import {
 } from "../components/Icons";
 import Waves from "../components/Waves";
 import { sensorConfig } from "../data/sensors";
+import { usePageMeta } from "../hooks/usePageMeta";
+import { isMock } from "../lib/api";
 
 const GITHUB_URL = "https://github.com/Dieguinho2309/dashboard-iot-agua";
 
@@ -54,6 +56,7 @@ const steps = [
 
 export default function Landing() {
     const comoFuncionaRef = useRef(null);
+    const headingRef = usePageMeta("Inicio");
 
     function handleScrollToSection(event) {
         event.preventDefault();
@@ -92,7 +95,7 @@ export default function Landing() {
                         Universidad del Magdalena · Proyecto IoT
                     </span>
 
-                    <h1 className="mt-6 bg-linear-to-b from-white to-slate-500 bg-clip-text text-4xl font-extrabold tracking-tighter text-transparent pb-2 sm:text-6xl md:text-7xl lg:text-8xl">
+                    <h1 ref={headingRef} tabIndex={-1} className="mt-6 bg-linear-to-b from-white to-slate-500 bg-clip-text text-4xl font-extrabold tracking-tighter text-transparent pb-2 sm:text-6xl md:text-7xl lg:text-8xl">
                         AquaMagdalena
                     </h1>
 
@@ -231,7 +234,9 @@ export default function Landing() {
                         <GraduationIcon className="size-4 text-slate-400" />
                         Universidad del Magdalena · Diego Ovalle
                     </p>
-                    <p className="font-mono">Datos simulados · prototipo académico</p>
+                    <p className="font-mono">
+                        {isMock ? "Datos simulados · prototipo académico" : "Monitoreo en vivo · nodo conectado"}
+                    </p>
                 </div>
             </footer>
         </div>

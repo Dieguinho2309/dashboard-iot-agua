@@ -1,6 +1,7 @@
 import AppLayout from "../components/AppLayout";
 import { ShieldIcon, DropletIcon, ThermometerIcon, BoltIcon } from "../components/Icons";
 import { evaluate, sensorConfig, simulation } from "../data/sensors";
+import { usePageMeta } from "../hooks/usePageMeta";
 import { useReadings } from "../hooks/useReadings";
 import { isMock } from "../lib/api";
 
@@ -20,6 +21,7 @@ const keys = Object.keys(sensorConfig);
 
 export default function Alertas() {
     const readings = useReadings();
+    const headingRef = usePageMeta("Alertas y eventos");
 
     const events = [];
     for (const key of keys) {
@@ -39,7 +41,7 @@ export default function Alertas() {
     return (
         <AppLayout readings={readings}>
             <div>
-                <h2 className="text-xl font-semibold text-white">Alertas y eventos</h2>
+                <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-white">Alertas y eventos</h2>
                 <p className="mt-1 text-xs text-slate-400">
                     {isMock ? "Eventos ilustrativos · modo simulado" : "Eventos detectados sobre los rangos optimos"}
                 </p>

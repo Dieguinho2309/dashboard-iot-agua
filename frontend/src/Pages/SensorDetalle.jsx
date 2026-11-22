@@ -4,6 +4,7 @@ import AppLayout from "../components/AppLayout";
 import HistoryChart from "../components/HistoryChart";
 import { evaluate, sensorConfig, sensorInfo } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
+import { usePageMeta } from "../hooks/usePageMeta";
 import { useReadings } from "../hooks/useReadings";
 import { HISTORY_RANGES, isMock } from "../lib/api";
 
@@ -72,6 +73,7 @@ export default function SensorDetalle() {
     const history = useHistory(hours);
     const sensor = sensorConfig[sensorKey];
     const info = sensorInfo[sensorKey];
+    const headingRef = usePageMeta(sensor ? `${sensor.title} · detalle` : "Sensor no encontrado");
 
     const points = useMemo(
         () =>
@@ -101,7 +103,7 @@ export default function SensorDetalle() {
             <AppLayout readings={readings}>
                 <div className="grid flex-1 place-items-center rounded-lg border border-slate-800 bg-slate-900/40 p-10 text-center">
                     <div>
-                        <h2 className="text-lg font-semibold text-white">Sensor no encontrado</h2>
+                        <h2 ref={headingRef} tabIndex={-1} className="text-lg font-semibold text-white">Sensor no encontrado</h2>
                         <p className="mt-2 text-xs text-slate-400">
                             La clave &quot;{sensorKey}&quot; no existe en el catalogo.
                         </p>
@@ -123,7 +125,7 @@ export default function SensorDetalle() {
                     <Link to={`/historial?range=${hours}`} className="text-xs text-cyan-300 hover:text-white">
                         ← Volver al historial
                     </Link>
-                    <h2 className="mt-2 text-xl font-semibold text-white">{sensor.title} · detalle</h2>
+                    <h2 ref={headingRef} tabIndex={-1} className="mt-2 text-xl font-semibold text-white">{sensor.title} · detalle</h2>
                     <p className="mt-1 text-xs text-slate-400">
                         {isMock ? "Datos simulados" : "Datos reales"} · periodo {range.label}
                     </p>
@@ -149,9 +151,16 @@ export default function SensorDetalle() {
             </div>
 
             {history.status === "error" && (
-                <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
-                    {history.error}
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
+                    <span>{history.error}</span>
+                    <button
+                        type="button"
+                        onClick={history.reload}
+                        className="rounded-md border border-rose-400/40 px-3 py-1.5 font-semibold transition hover:bg-rose-400/10"
+                    >
+                        Reintentar
+                    </button>
+                </div>
             )}
 
             {history.status === "loading" && (
@@ -194,7 +203,7 @@ export default function SensorDetalle() {
                                 label: "Variacion",
                                 value: `${stats.change >= 0 ? "+" : ""}${formatValue(stats.change, sensor)} ${sensor.unit}`
                             },
-                            { label: "Tiempo en rango", value: `${stats.inRangePct}%` }
+                            { label: "% de muestras en rango", value: `${stats.inRangePct}%` }
                         ].map((item) => (
                             <div key={item.label} className="rounded-lg border border-slate-800 bg-slate-900/40 p-3">
                                 <p className="text-[11px] text-slate-400">{item.label}</p>

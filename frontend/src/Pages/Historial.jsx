@@ -4,6 +4,7 @@ import AppLayout from "../components/AppLayout";
 import HistoryChart from "../components/HistoryChart";
 import { sensorConfig } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
+import { usePageMeta } from "../hooks/usePageMeta";
 import { useReadings } from "../hooks/useReadings";
 import { HISTORY_RANGES, isMock } from "../lib/api";
 
@@ -13,12 +14,13 @@ export default function Historial() {
     const [hours, setHours] = useState(24);
     const readings = useReadings();
     const history = useHistory(hours);
+    const headingRef = usePageMeta("Historial y tendencias");
 
     return (
         <AppLayout readings={readings}>
             <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                    <h2 className="text-xl font-semibold text-white">Historial y tendencias</h2>
+                    <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-white">Historial y tendencias</h2>
                     <p className="mt-1 text-xs text-slate-400">
                         {isMock ? "Series ilustrativas · modo simulado" : "Series temporales del nodo"}
                     </p>
@@ -44,9 +46,16 @@ export default function Historial() {
             </div>
 
             {history.status === "error" && (
-                <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
-                    {history.error}
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-300">
+                    <span>{history.error}</span>
+                    <button
+                        type="button"
+                        onClick={history.reload}
+                        className="rounded-md border border-rose-400/40 px-3 py-1.5 font-semibold transition hover:bg-rose-400/10"
+                    >
+                        Reintentar
+                    </button>
+                </div>
             )}
 
             {history.status === "loading" && (

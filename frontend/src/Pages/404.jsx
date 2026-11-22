@@ -1,9 +1,12 @@
 import { Link } from "react-router";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 export default function NotFound() {
+    const headingRef = usePageMeta("Pagina no encontrada");
+
     return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-[#0b101e] px-6 text-center text-white">
-            <h1 className="w-fit bg-linear-to-b from-white to-slate-500 bg-clip-text text-5xl font-extrabold tracking-tighter text-transparent sm:text-7xl">
+            <h1 ref={headingRef} tabIndex={-1} className="w-fit bg-linear-to-b from-white to-slate-500 bg-clip-text text-5xl font-extrabold tracking-tighter text-transparent sm:text-7xl">
                 404
             </h1>
             <p className="mx-auto max-w-md text-base leading-relaxed text-slate-400 sm:text-lg">

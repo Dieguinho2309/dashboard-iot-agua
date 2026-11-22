@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import AppLayout from "../components/AppLayout";
 import { SensorCard } from "../components/SensorCard";
 import { sensorConfig } from "../data/sensors";
+import { usePageMeta } from "../hooks/usePageMeta";
 import { useReadings } from "../hooks/useReadings";
 
 // El mapa (maplibre-gl) es lo mas pesado: se carga en su propio chunk.
@@ -11,9 +12,12 @@ const keys = Object.keys(sensorConfig);
 
 export default function Dashboard() {
     const readings = useReadings();
+    const headingRef = usePageMeta("Panel principal");
 
     return (
         <AppLayout readings={readings}>
+            <h2 ref={headingRef} tabIndex={-1} className="sr-only">Panel principal</h2>
+
             <div className="grid gap-5 xl:grid-cols-12">
                 <div className="h-72 overflow-hidden rounded-lg border border-slate-800 sm:h-105 xl:col-span-8 xl:h-125">
                     <Suspense

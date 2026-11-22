@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router";
 import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon, ClockIcon, ShieldIcon } from "./Icons";
 import { node } from "../data/sensors";
@@ -12,6 +13,15 @@ const navItems = [
 export default function Sidebar({ open, onClose, live }) {
     const online = !isMock && live;
 
+    useEffect(() => {
+        if (!open) return;
+        function handleKeyDown(event) {
+            if (event.key === "Escape") onClose();
+        }
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [open, onClose]);
+
     return (
         <>
             <div
@@ -23,6 +33,9 @@ export default function Sidebar({ open, onClose, live }) {
             />
 
             <aside
+                role={open ? "dialog" : undefined}
+                aria-modal={open ? "true" : undefined}
+                aria-label={open ? "Navegacion principal" : undefined}
                 className={`fixed inset-y-0 left-0 z-50 flex w-67.5 shrink-0 flex-col border-r border-slate-800 bg-[#0a0f1c] transition-transform duration-300 lg:static lg:translate-x-0 ${
                     open ? "translate-x-0" : "-translate-x-full"
                 }`}
