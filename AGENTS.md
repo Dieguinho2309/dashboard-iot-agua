@@ -30,36 +30,48 @@ Desde frontend/:
 - npm run build
 - npm run preview
 
-No hay tests. Se esperan hasta conectar el ESP32.
+Desde backend/:
+- npm install
+- npm run db:migrate
+- npm run seed
+- npm run dev / npm start
+
+No hay tests. Se esperan hasta conectar el ESP32. Verificar con lint + build y smoke manual de rutas/endpoints.
 
 ---
 
 ## Estado
 
-- Lecturas simuladas (Math.random) en frontend/src/data/sensors.js:nextReading()
-- Backend: API modular en backend/ (Postgres 16 en Docker)
-- ESP32 sin conectar
+- Modo simulado por defecto: frontend/src/data/sensors.js:nextReading() (random walk continuo) y buildSeries()
+- Backend API Express 5 implementado en backend/ (routes/service/repository + pg). Postgres 16 previsto en Docker; sin compose en el repo
+- Frontend usa la API solo si existe VITE_API_URL; si no, modo simulado con fallback
+- ESP32 sin conectar; firmware/pines no definidos todavia
 - Mapa: MapLibre GL (look L3, toggle claro/oscuro) + OpenFreeMap, todo en frontend/src/components/MapView.jsx
-- Historial: 24 puntos x 3s = ~72 segundos
-- Footer: "Datos simulados - prototipo academico"
+- Dashboard: 24 puntos x 3s = ~72 segundos
+- Vistas: /historial con selector 1 h / 24 h / 7 d y detalle por sensor en /historial/:sensorKey?range=... ; /alertas con eventos por rango
+- Footer y badge de estado dinamicos: "Datos simulados" o "Datos en vivo"/"Sin conexion"
+- IA (/api/chat, Ollama, RAG) diferida: el usuario quiere definirla mejor antes de implementarla
 
 ---
 
 ## Decisiones clave
 
 - Estado de sensor calculado con evaluate(), no prop "status"
-- Header sin busqueda, campana, avatar
-- Sidebar con un solo item (Panel Principal)
+- Header sin busqueda, campana, avatar; icono de casa lleva al landing
+- Sidebar con 3 items (Panel Principal, Historial, Alertas); la marca AquaMagdalena vuelve a /dashboard
 - Footer dentro de main con flex column
 - mt-auto funciona porque main es flex flex-1 flex-col
+- El rango del historial se guarda en ?range= para sobrevivir al back
+- Panel.jsx unifica el estilo de tarjetas; ErrorBoundary evita que una vista rota tumbe la app
 
 ---
 
-## Backend plan
+## Backend
 
 Arquitectura modular 3 capas: routes/service/repository.
-Endpoints: POST /api/readings, GET /api/latest, GET /api/history (+ GET /api/health, POST /api/chat)
-Fases: 1) Postgres + migraciones -> 2) capas -> 3) endpoints -> 4) proxy+fetch -> 5) ESP32 HTTPClient -> 6) estados loading/error
+Endpoints: POST /api/readings, GET /api/readings/latest, GET /api/readings/history (+ GET /api/health).
+Sin token X-API-Key ni zod: validacion manual en readings.service.js (usuario eligio backend minimo).
+Pendiente: HTTPClient del ESP32 y la IA (/api/chat con Ollama/RAG, aun sin definir).
 
 BD: PostgreSQL 16 en Docker. Modelo normalizado nodes/sensors/readings/sensor_values.
 Migraciones en backend/src/db/migrations (runner: npm run db:migrate).
@@ -70,7 +82,7 @@ Separar recorded_at (hora ESP32) y received_at (hora servidor).
 ## Notas rapidas
 
 - Paginas en frontend/src/Pages/; worker MapLibre en frontend/src/lib/maplibre.js
-- Code-splitting: React.lazy de Dashboard y MapView; maplibre-gl solo carga en /dashboard
+- Code-splitting: React.lazy de Dashboard, Historial, SensorDetalle, Alertas y MapView; maplibre-gl solo carga en /dashboard
 - git branch -vv NO dice ramas remotas; usar git ls-remote --heads origin
 - glob que solo busca md/jsx/css no ve .svg/.png
 - PowerShell 5.1 distorsiona caracteres no-ASCII; evita cadenas con acentos
