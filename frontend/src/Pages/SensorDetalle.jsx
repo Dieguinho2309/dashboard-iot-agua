@@ -245,7 +245,7 @@ export default function SensorDetalle() {
                             <button
                                 type="button"
                                 onClick={() => exportCsv(points, sensorKey)}
-                                className="rounded-md border border-cyan-500/40 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:bg-cyan-500/10"
+                                className="rounded-md border border-cyan-500/40 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:border-cyan-300 hover:bg-cyan-500/20 hover:text-white hover:shadow-lg hover:shadow-cyan-500/10 active:translate-y-px"
                             >
                                 Exportar CSV
                             </button>
