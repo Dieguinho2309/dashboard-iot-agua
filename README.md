@@ -2,6 +2,10 @@
 
 Panel web para monitorear **pH, temperatura y conductividad eléctrica** de un estanque en la Universidad del Magdalena. Incluye mapa, historial por rangos, alertas por umbrales y una API Express + PostgreSQL preparada para recibir las lecturas del ESP32.
 
+**Demo en vivo:** <https://dashboard-iot-agua.vercel.app> · **Repositorio:** <https://github.com/Dieguinho2309/dashboard-iot-agua>
+
+**Requisitos:** Node 24 / npm 11. PostgreSQL 16 solo si vas a levantar la API.
+
 > **Estado actual:** el ESP32 todavía no está conectado. Por defecto el frontend corre en **modo simulado**: `nextReading()` en `frontend/src/data/sensors.js` genera valores de forma continua con `Math.random()`. La API real existe, pero solo se usa si defines `VITE_API_URL`. La interfaz indica en todo momento si los datos son simulados o reales.
 
 ## Stack
@@ -38,7 +42,7 @@ npm install
 copy .env.example .env        # en macOS/Linux: cp .env.example .env
 # Ajusta DATABASE_URL y CORS_ORIGIN en backend/.env
 npm run db:migrate
-npm run seed                  # inserta el nodo esp32-01 y 5 lecturas de prueba
+npm run seed                  # inserta 5 lecturas de prueba (el nodo ya existe tras la migración)
 npm run dev                   # API en http://localhost:3001
 ```
 
@@ -73,6 +77,42 @@ Desde `backend/`:
 | `npm run seed` | Carga lecturas de prueba (`source='seed'`) |
 
 No hay tests automatizados todavía; se esperan hasta conectar el ESP32. La verificación actual es `lint` + `build` y pruebas manuales de rutas/endpoints.
+
+## Estructura
+
+```text
+proyecto-iot/
+├── backend/
+│   ├── .env.example
+│   └── src/
+│       ├── config/env.js
+│       ├── db/
+│       │   ├── migrations/001_init.sql
+│       │   ├── connection.js
+│       │   ├── migrate.js
+│       │   └── schema.sql
+│       ├── middleware/errors.js
+│       ├── modules/readings/
+│       │   ├── readings.routes.js
+│       │   ├── readings.service.js
+│       │   └── readings.repository.js
+│       ├── scripts/seed.js
+│       └── server.js
+├── frontend/
+│   ├── public/robots.txt
+│   ├── vercel.json
+│   └── src/
+│       ├── data/sensors.js
+│       ├── lib/{api.js,maplibre.js}
+│       ├── Pages/{Landing,Dashboard,Historial,SensorDetalle,Alertas,404}.jsx
+│       ├── components/{MapView,Panel,SensorCard,HistoryChart,...}.jsx
+│       ├── hooks/{useReadings,useHistory,usePageMeta}.js
+│       ├── App.jsx
+│       ├── index.css
+│       └── main.jsx
+├── AGENTS.md
+└── README.md
+```
 
 ## Rutas de la interfaz
 
@@ -113,10 +153,14 @@ Ejemplo de lectura:
 - **El mapa no necesita API key.** Usa MapLibre GL con teselas de OpenFreeMap y tiene toggle claro/oscuro. Las coordenadas del nodo están en `frontend/src/data/sensors.js`; MapLibre espera `[lng, lat]`.
 - **Historial:** el dashboard mantiene una ventana deslizante de 24 lecturas cada 3 s (~72 s). La vista `/historial` pide series de 1 h, 24 h o 7 d al backend (o las simula) y el rango viaja en la URL, así que sobrevive al botón *atrás*.
 - **Rangos de referencia:** pH 7.0–7.6, temperatura 22–27 °C, conductividad 400–600 µS/cm. Son valores típicos de agua dulce, no la especificación final de los sensores.
-- **Code-splitting:** `Dashboard`, `Historial`, `SensorDetalle`, `Alertas` y `MapView` se cargan de forma diferida; MapLibre solo entra en `/dashboard`.
-- **Accesibilidad y honestidad:** foco y título por ruta, menu cerrable con Escape, estados de carga/error con reintento y etiquetas que cambian entre *modo simulado* y *datos reales*.
+- **UI:** accesible (foco y título por ruta, cierre con Escape, estados de error con reintento) y con code-splitting; MapLibre solo carga en `/dashboard`.
 - **Deploy:** Vercel sirve solo el frontend; configurar Root Directory `frontend`, build `npm run build` y output `dist/`. `frontend/vercel.json` reescribe las rutas SPA a `index.html`. El backend/PostgreSQL/Ollama deben desplegarse por separado.
-- **Ramas:** `main` es la versión vigente. `feature/mapa` conserva un diseño alternativo anterior y no se fusionó.
+
+## Pendiente
+
+- Cliente HTTP del ESP32 y definición de pines/firmware.
+- Integración de IA (`/api/chat` con Ollama/RAG), aún en diseño.
+- Tests automatizados y despliegue del backend/PostgreSQL.
 
 ## Autor
 

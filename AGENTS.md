@@ -84,6 +84,8 @@ Separar recorded_at (hora ESP32) y received_at (hora servidor).
 - Paginas en frontend/src/Pages/; worker MapLibre en frontend/src/lib/maplibre.js
 - Code-splitting: React.lazy de Dashboard, Historial, SensorDetalle, Alertas y MapView; maplibre-gl solo carga en /dashboard
 - git branch -vv NO dice ramas remotas; usar git ls-remote --heads origin
+- main es la version vigente; feature/mapa queda sin fusionar (diseno alternativo)
+- fijar autor con git config user.name "Dieguinho2309" y git config user.email "odiegoandres@gmail.com" (3 commits iniciales dicen "Dieguito:b", mismo email; no reescribir historial publico)
 - glob que solo busca md/jsx/css no ve .svg/.png
 - PowerShell 5.1 distorsiona caracteres no-ASCII; evita cadenas con acentos
 - Si push rechazado: git fetch origin; comparar con origin/main
