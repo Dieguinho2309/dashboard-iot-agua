@@ -80,6 +80,7 @@ export default function Landing() {
                 </nav>
             </header>
 
+            <main>
             <section className="relative flex min-h-dvh flex-col overflow-hidden">
                 <div aria-hidden="true" className="pointer-events-none absolute inset-0">
                     <div className="absolute left-1/2 top-56 h-136 w-136 -translate-x-1/2 rounded-full bg-cyan-500/20 blur-[130px]" />
@@ -193,7 +194,7 @@ export default function Landing() {
                                 <span className="grid size-11 place-items-center rounded-xl bg-slate-800 text-cyan-300">
                                     <Icon className="size-5" />
                                 </span>
-                                <span className="mt-4 block font-mono text-xs text-slate-500">
+                                <span className="mt-4 block font-mono text-xs text-slate-400">
                                     Paso {index + 1}
                                 </span>
                                 <h3 className="mt-1 text-lg font-semibold text-white">{title}</h3>
@@ -218,15 +219,16 @@ export default function Landing() {
                     </Link>
                 </div>
             </section>
+            </main>
 
             <footer className="relative z-10 border-t border-slate-800 px-6 py-8">
-                <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-xs text-slate-500 sm:flex-row">
+                <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-xs text-slate-400 sm:flex-row">
                     <p className="flex items-center gap-2">
                         <WavesIcon className="size-4 text-cyan-400" />
                         AquaMagdalena · Prototipo IoT de calidad del agua
                     </p>
                     <p className="flex items-center gap-2">
-                        <GraduationIcon className="size-4 text-slate-600" />
+                        <GraduationIcon className="size-4 text-slate-400" />
                         Universidad del Magdalena · Diego Ovalle
                     </p>
                     <p className="font-mono">Datos simulados · prototipo académico</p>

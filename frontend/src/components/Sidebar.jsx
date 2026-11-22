@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon } from "./Icons";
 import { node } from "../data/sensors";
 
@@ -26,7 +27,7 @@ export default function Sidebar({ open, onClose }) {
 
                     <div className="min-w-0 flex-1">
                         <p className="truncate text-[15px] leading-tight font-bold text-white">AquaMagdalena</p>
-                        <p className="truncate text-[11px] text-slate-500">Calidad del agua · IoT</p>
+                        <p className="truncate text-[11px] text-slate-400">Calidad del agua · IoT</p>
                     </div>
 
                     <button
@@ -39,13 +40,13 @@ export default function Sidebar({ open, onClose }) {
                     </button>
                 </div>
 
-                <p className="px-5 pb-2 text-[10px] font-semibold tracking-[0.14em] text-slate-600 uppercase">Navegación</p>
+                <p className="px-5 pb-2 text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase">Navegación</p>
 
                 <nav className="flex-1 space-y-1 overflow-y-auto px-3">
                     {navItems.map(({ label, icon: Icon, active }) => (
-                        <a
+                        <Link
                             key={label}
-                            href="#"
+                            to="/dashboard"
                             onClick={onClose}
                             aria-current={active ? "page" : undefined}
                             className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
@@ -53,9 +54,9 @@ export default function Sidebar({ open, onClose }) {
                             }`}
                         >
                             {active && <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-cyan-400" />}
-                            <Icon className={`size-5 shrink-0 ${active ? "text-cyan-300" : "text-slate-500"}`} />
+                            <Icon className={`size-5 shrink-0 ${active ? "text-cyan-300" : "text-slate-400"}`} />
                             {label}
-                        </a>
+                        </Link>
                     ))}
                 </nav>
 
@@ -74,17 +75,17 @@ export default function Sidebar({ open, onClose }) {
 
                         <dl className="mt-3 space-y-1.5 text-[11px]">
                             <div className="flex items-center justify-between">
-                                <dt className="text-slate-500">Estado</dt>
+                                <dt className="text-slate-400">Estado</dt>
                                 <dd className="flex items-center gap-1 text-slate-300">
                                     <WifiIcon className="size-3 text-emerald-400" /> Conectado
                                 </dd>
                             </div>
                             <div className="flex items-center justify-between">
-                                <dt className="text-slate-500">Uptime</dt>
+                                <dt className="text-slate-400">Uptime</dt>
                                 <dd className="font-mono text-slate-300 tabular-nums">{node.uptime}</dd>
                             </div>
                             <div className="flex items-center justify-between">
-                                <dt className="text-slate-500">Firmware</dt>
+                                <dt className="text-slate-400">Firmware</dt>
                                 <dd className="font-mono text-slate-300">{node.firmware}</dd>
                             </div>
                         </dl>

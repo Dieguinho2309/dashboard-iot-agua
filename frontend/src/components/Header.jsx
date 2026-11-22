@@ -30,7 +30,7 @@ export default function Header({ onMenu }) {
                 <h1 className="truncate text-[15px] leading-tight font-bold text-white sm:text-lg">
                     Panel IoT · Universidad del Magdalena
                 </h1>
-                <p className="hidden truncate text-[11px] text-slate-500 sm:block">
+                <p className="hidden truncate text-[11px] text-slate-400 sm:block">
                     Monitoreo de la calidad del agua en tiempo real
                 </p>
             </div>
@@ -43,7 +43,7 @@ export default function Header({ onMenu }) {
             </div>
 
             <span className="hidden items-center gap-1.5 rounded-full border border-slate-700 px-3 py-1.5 font-mono text-[11px] text-slate-300 tabular-nums lg:inline-flex">
-                <ClockIcon className="size-3.5 text-slate-500" />
+                <ClockIcon className="size-3.5 text-slate-400" />
                 {now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
         </header>

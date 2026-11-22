@@ -42,7 +42,7 @@ export default function Dashboard() {
                         <div className="h-72 overflow-hidden rounded-lg border border-slate-800 sm:h-105 xl:col-span-8 xl:h-125">
                             <Suspense
                                 fallback={
-                                    <div className="grid h-full w-full place-items-center text-xs text-slate-500">
+                                    <div className="grid h-full w-full place-items-center text-xs text-slate-400">
                                         Cargando mapa...
                                     </div>
                                 }

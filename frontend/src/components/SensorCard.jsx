@@ -34,7 +34,7 @@ export function SensorCard({ sensorKey, sensor, value, history }) {
 
                 <span
                     className={`ml-auto flex items-center gap-0.5 text-xs tabular-nums ${
-                        moved ? (up ? "text-emerald-400" : "text-rose-400") : "text-slate-600"
+                        moved ? (up ? "text-emerald-400" : "text-rose-400") : "text-slate-400"
                     }`}
                 >
                     {moved && <DeltaArrow up={up} />}
@@ -57,7 +57,7 @@ export function SensorCard({ sensorKey, sensor, value, history }) {
                 />
             </div>
 
-            <div className="mt-2 flex justify-between text-xs text-slate-500">
+            <div className="mt-2 flex justify-between text-xs text-slate-400">
                 <span>{sensor.min}</span>
                 <span>
                     óptimo {sensor.optimal[0]}–{sensor.optimal[1]} {sensor.unit}
