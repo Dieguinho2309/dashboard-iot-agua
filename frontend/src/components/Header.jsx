@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { MenuIcon, ActivityIcon, ClockIcon } from "./Icons";
+import { isMock } from "../lib/api";
 
 function useClock() {
     const [now, setNow] = useState(() => new Date());
@@ -12,8 +13,21 @@ function useClock() {
     return now;
 }
 
-export default function Header({ onMenu }) {
+export default function Header({ onMenu, live, status, error }) {
     const now = useClock();
+    const mode = isMock ? "mock" : live ? "live" : status === "error" ? "error" : "connecting";
+    const badge = {
+        mock: { label: "Modo simulado", tone: "amber" },
+        live: { label: "Sistema activo", tone: "emerald" },
+        error: { label: "Sin conexion", tone: "rose" },
+        connecting: { label: "Conectando", tone: "slate" }
+    }[mode];
+    const tones = {
+        amber: "border-amber-500/30 bg-amber-500/10 text-amber-300",
+        emerald: "border-emerald-500/25 bg-emerald-500/10 text-emerald-300",
+        rose: "border-rose-500/30 bg-rose-500/10 text-rose-300",
+        slate: "border-slate-700 bg-slate-800/60 text-slate-300"
+    };
 
     return (
         <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b border-slate-800 bg-[#0b101e]/90 px-4 backdrop-blur sm:px-6">
@@ -36,9 +50,12 @@ export default function Header({ onMenu }) {
             </div>
 
             <div className="hidden items-center gap-2 md:flex">
-                <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-300">
+                <span
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold ${tones[badge.tone]}`}
+                    title={error ?? undefined}
+                >
                     <ActivityIcon className="size-3.5" />
-                    Sistema activo  
+                    {badge.label}
                 </span>
             </div>
 

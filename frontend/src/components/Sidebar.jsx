@@ -1,10 +1,13 @@
 import { Link } from "react-router";
 import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon } from "./Icons";
 import { node } from "../data/sensors";
+import { isMock } from "../lib/api";
 
 const navItems = [{ label: "Panel Principal", icon: LayoutIcon, active: true }];
 
-export default function Sidebar({ open, onClose }) {
+export default function Sidebar({ open, onClose, live }) {
+    const online = !isMock && live;
+
     return (
         <>
             <div
@@ -67,9 +70,9 @@ export default function Sidebar({ open, onClose }) {
                                 <CpuIcon className="size-4 text-cyan-300" />
                                 {node.shortName}
                             </span>
-                            <span className="flex items-center gap-1.5 text-[10px] font-semibold text-emerald-300">
-                                <span className="size-1.5 rounded-full bg-emerald-400" />
-                                Online
+                            <span className={`flex items-center gap-1.5 text-[10px] font-semibold ${online ? "text-emerald-300" : "text-amber-300"}`}>
+                                <span className={`size-1.5 rounded-full ${online ? "bg-emerald-400" : "bg-amber-400"}`} />
+                                {online ? "Online" : "Simulado"}
                             </span>
                         </div>
 
@@ -77,7 +80,7 @@ export default function Sidebar({ open, onClose }) {
                             <div className="flex items-center justify-between">
                                 <dt className="text-slate-400">Estado</dt>
                                 <dd className="flex items-center gap-1 text-slate-300">
-                                    <WifiIcon className="size-3 text-emerald-400" /> Conectado
+                                    <WifiIcon className={`size-3 ${online ? "text-emerald-400" : "text-amber-400"}`} /> {online ? "Conectado" : "Simulado"}
                                 </dd>
                             </div>
                             <div className="flex items-center justify-between">
