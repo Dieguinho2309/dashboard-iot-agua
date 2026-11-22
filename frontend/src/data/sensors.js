@@ -50,6 +50,27 @@ export const sensorConfig = {
     }
 };
 
+export const sensorInfo = {
+    ph: {
+        description: "Mide que tan acido o alcalino es el agua.",
+        range: "Para agua dulce el rango optimo del prototipo es 7.0 - 7.6.",
+        causes: "Puede bajar por lluvia acida, materia organica o vertidos; subir por algas y fotosintesis intensa.",
+        action: "Revisa la fuente, evita contaminacion y confirma siempre con un laboratorio."
+    },
+    temperature: {
+        description: "Influye en el oxigeno disuelto y en el metabolismo de la vida acuatica.",
+        range: "El rango recomendado del prototipo es 22 - 27 C.",
+        causes: "Exposicion solar directa, escasa circulacion o descargas termicas.",
+        action: "Verifica sombreado, circulacion y aireacion antes de tomar decisiones."
+    },
+    conductivity: {
+        description: "Estima la cantidad de sales disueltas en el agua.",
+        range: "El rango optimo del prototipo es 400 - 600 uS/cm.",
+        causes: "Fertilizantes, escorrentia, salinidad o vertidos domesticos.",
+        action: "Revisa entradas de agua y drenajes; considera un recambio parcial si procede."
+    }
+};
+
 export const simulation = {
     intervalMs: 3000,
     historyPoints: 24

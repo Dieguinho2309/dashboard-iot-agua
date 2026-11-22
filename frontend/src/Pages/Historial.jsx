@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import AppLayout from "../components/AppLayout";
 import HistoryChart from "../components/HistoryChart";
 import { sensorConfig } from "../data/sensors";
@@ -62,9 +63,11 @@ export default function Historial() {
 
             <div className="grid gap-5 xl:grid-cols-2">
                 {keys.map((key) => (
-                    <section
+                    <Link
                         key={key}
-                        className="rounded-lg border border-slate-800 bg-slate-900/40 p-4"
+                        to={`/historial/${key}?range=${hours}`}
+                        aria-label={`Ver detalle de ${sensorConfig[key].title}`}
+                        className="rounded-lg border border-slate-800 bg-slate-900/40 p-4 transition hover:border-cyan-500/50 hover:bg-slate-900/70"
                     >
                         <div className="flex items-baseline justify-between gap-2">
                             <h3 className="text-sm font-semibold text-white">{sensorConfig[key].title}</h3>
@@ -77,7 +80,8 @@ export default function Historial() {
                                 sensor={sensorConfig[key]}
                             />
                         </div>
-                    </section>
+                        <span className="mt-3 block text-[11px] text-cyan-300">Ver detalle →</span>
+                    </Link>
                 ))}
             </div>
         </AppLayout>

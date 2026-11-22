@@ -6,6 +6,7 @@ import NotFound from "./Pages/404";
 // Cada pagina pesada se carga aparte; el mapa solo entra con el dashboard.
 const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const Historial = lazy(() => import("./Pages/Historial"));
+const SensorDetalle = lazy(() => import("./Pages/SensorDetalle"));
 const Alertas = lazy(() => import("./Pages/Alertas"));
 
 function RouteFallback() {
@@ -24,6 +25,7 @@ export default function App() {
                     <Route path="/" element={<Landing />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/historial" element={<Historial />} />
+                    <Route path="/historial/:sensorKey" element={<SensorDetalle />} />
                     <Route path="/alertas" element={<Alertas />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
