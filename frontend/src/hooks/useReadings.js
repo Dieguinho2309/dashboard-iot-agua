@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { fetchSnapshot } from "../lib/api";
-import { nextReading, sensorConfig, simulation } from "../data/sensors";
+import { buildSeries, sensorConfig, simulation } from "../data/sensors";
 
 const keys = Object.keys(sensorConfig);
 
 function initialState() {
+    const series = Object.fromEntries(keys.map((key) => [key, buildSeries(key, simulation.historyPoints)]));
     return {
-        values: Object.fromEntries(keys.map((key) => [key, nextReading(key)])),
-        history: Object.fromEntries(
-            keys.map((key) => [key, Array.from({ length: simulation.historyPoints }, () => nextReading(key))])
-        ),
+        values: Object.fromEntries(keys.map((key) => [key, series[key][series[key].length - 1]])),
+        history: series,
         status: "loading",
         error: null
     };

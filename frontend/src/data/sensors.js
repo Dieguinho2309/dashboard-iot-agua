@@ -55,11 +55,25 @@ export const simulation = {
     historyPoints: 24
 };
 
-/** Genera una lectura simulada alrededor del valor central del sensor. */
-export function nextReading(key) {
-    const { start, spread, decimals } = sensorConfig[key];
-    const value = start + (Math.random() - 0.5) * spread;
+/** Genera una lectura simulada continua a partir de la anterior. */
+export function nextReading(key, previous) {
+    const { start, spread, decimals, min, max } = sensorConfig[key];
+    const base = typeof previous === "number" ? previous : start;
+    const drift = (Math.random() - 0.5) * spread;
+    const pull = (start - base) * 0.08;
+    const value = Math.min(max, Math.max(min, base + drift + pull));
     return Number(value.toFixed(decimals));
+}
+
+/** Serie simulada con variacion gradual, util para el historial de la demo. */
+export function buildSeries(key, count) {
+    const series = [];
+    let value = sensorConfig[key].start;
+    for (let index = 0; index < count; index += 1) {
+        value = nextReading(key, value);
+        series.push(value);
+    }
+    return series;
 }
 
 /**
