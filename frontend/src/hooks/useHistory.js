@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchHistory } from "../lib/api";
 
 export function useHistory(hours) {
     const [state, setState] = useState({ hours: null, readings: [], status: "loading", error: null });
+    const [nonce, setNonce] = useState(0);
 
     useEffect(() => {
         let cancelled = false;
@@ -12,19 +13,28 @@ export function useHistory(hours) {
                 if (!cancelled) setState({ hours, readings, status: "ok", error: null });
             })
             .catch((err) => {
-                if (!cancelled) setState({ hours, readings: [], status: "error", error: err.message });
+                if (!cancelled) {
+                    setState((prev) => ({ ...prev, status: "error", error: err.message }));
+                }
             });
 
         return () => {
             cancelled = true;
         };
-    }, [hours]);
+    }, [hours, nonce]);
 
     const stale = state.hours !== hours;
+    const reload = useCallback(() => {
+        setState((prev) => ({ ...prev, status: "loading", error: null }));
+        setNonce((value) => value + 1);
+    }, []);
 
     return {
-        readings: stale ? [] : state.readings,
+        readings: state.readings,
         status: stale ? "loading" : state.status,
-        error: stale ? null : state.error
+        error: stale ? null : state.error,
+        stale,
+        reloading: stale || state.status === "loading",
+        reload
     };
 }

@@ -5,13 +5,7 @@ import HistoryChart from "../components/HistoryChart";
 import { sensorConfig } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
 import { useReadings } from "../hooks/useReadings";
-import { isMock } from "../lib/api";
-
-const RANGES = [
-    { hours: 1, label: "1 h" },
-    { hours: 24, label: "24 h" },
-    { hours: 168, label: "7 d" }
-];
+import { HISTORY_RANGES, isMock } from "../lib/api";
 
 const keys = Object.keys(sensorConfig);
 
@@ -31,7 +25,7 @@ export default function Historial() {
                 </div>
 
                 <div className="flex gap-1 rounded-lg border border-slate-800 bg-slate-900/40 p-1">
-                    {RANGES.map((range) => (
+                    {HISTORY_RANGES.map((range) => (
                         <button
                             key={range.hours}
                             type="button"
@@ -67,8 +61,14 @@ export default function Historial() {
                         key={key}
                         to={`/historial/${key}?range=${hours}`}
                         aria-label={`Ver detalle de ${sensorConfig[key].title}`}
-                        className="rounded-lg border border-slate-800 bg-slate-900/40 p-4 transition hover:border-cyan-500/50 hover:bg-slate-900/70"
+                        className={`rounded-lg border border-slate-800 bg-slate-900/40 p-4 transition hover:border-cyan-500/50 hover:bg-slate-900/70 ${
+                            history.stale ? "opacity-60" : ""
+                        }`}
+                        aria-busy={history.reloading}
                     >
+                        {history.reloading && (
+                            <div className="mb-2 h-1 animate-pulse rounded bg-cyan-500/30 motion-reduce:animate-none" aria-hidden="true" />
+                        )}
                         <div className="flex items-baseline justify-between gap-2">
                             <h3 className="text-sm font-semibold text-white">{sensorConfig[key].title}</h3>
                             <span className="font-mono text-[11px] text-slate-400">{sensorConfig[key].unit}</span>

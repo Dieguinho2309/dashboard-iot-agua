@@ -6,11 +6,13 @@ export const isMock = API_URL === "";
 
 const keys = Object.keys(sensorConfig);
 
-const RANGES = {
-    1: { points: 60, stepMs: 60 * 1000 },
-    24: { points: 96, stepMs: 15 * 60 * 1000 },
-    168: { points: 84, stepMs: 2 * 60 * 60 * 1000 }
-};
+export const HISTORY_RANGES = [
+    { hours: 1, label: "1 h", points: 60, stepMs: 60 * 1000 },
+    { hours: 24, label: "24 h", points: 96, stepMs: 15 * 60 * 1000 },
+    { hours: 168, label: "7 d", points: 84, stepMs: 2 * 60 * 60 * 1000 }
+];
+
+const RANGES = Object.fromEntries(HISTORY_RANGES.map((range) => [range.hours, range]));
 
 let mockState = null;
 

@@ -7,7 +7,14 @@ function formatPointTime(recordedAt, index) {
     return date.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function HistoryChart({ readings, sensorKey, sensor, detailed = false }) {
+export default function HistoryChart({
+    readings,
+    sensorKey,
+    sensor,
+    detailed = false,
+    startLabel = "inicio",
+    endLabel = "ahora"
+}) {
     const [hovered, setHovered] = useState(null);
 
     const points = readings
@@ -35,12 +42,30 @@ export default function HistoryChart({ readings, sensorKey, sensor, detailed = f
     const bandBottom = yFor(sensor.optimal[0]);
     const last = values[values.length - 1];
 
-    function handleMove(event) {
+    function handlePointer(event) {
         if (!detailed) return;
         const rect = event.currentTarget.getBoundingClientRect();
         if (!rect.width) return;
         const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
         setHovered(Math.round(ratio * (points.length - 1)));
+    }
+
+    function handleLeave(event) {
+        if (event.pointerType === "mouse") setHovered(null);
+    }
+
+    function handleKeyDown(event) {
+        if (!detailed) return;
+        const final = points.length - 1;
+        const current = hovered ?? final;
+        let next;
+        if (event.key === "ArrowLeft") next = current - 1;
+        else if (event.key === "ArrowRight") next = current + 1;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = final;
+        else return;
+        event.preventDefault();
+        setHovered(Math.max(0, Math.min(final, next)));
     }
 
     return (
@@ -50,9 +75,14 @@ export default function HistoryChart({ readings, sensorKey, sensor, detailed = f
                 preserveAspectRatio="none"
                 className={`w-full ${detailed ? "h-72 cursor-crosshair" : "h-52"}`}
                 role="img"
-                aria-label={`Historial de ${sensor.title}`}
-                onPointerMove={handleMove}
-                onPointerLeave={() => setHovered(null)}
+                aria-label={`Historial de ${sensor.title} en ${sensor.unit || "unidades"}. Usa las flechas para recorrer las lecturas.`}
+                tabIndex={detailed ? 0 : undefined}
+                onPointerMove={handlePointer}
+                onPointerDown={handlePointer}
+                onPointerLeave={handleLeave}
+                onFocus={() => detailed && setHovered((value) => value ?? points.length - 1)}
+                onBlur={() => setHovered(null)}
+                onKeyDown={handleKeyDown}
             >
                 <rect x="0" y={bandTop} width={width} height={bandBottom - bandTop} fill="#22d3ee" opacity="0.08" />
                 <polyline points={area} fill={sensor.color} opacity="0.1" />
@@ -84,6 +114,7 @@ export default function HistoryChart({ readings, sensorKey, sensor, detailed = f
                 <div
                     className="pointer-events-none absolute top-2 z-10 -translate-x-1/2 rounded-md border border-slate-700 bg-[#0b101e]/95 px-2 py-1 text-[11px] text-slate-200 shadow-lg"
                     style={{ left: `${Math.min(88, Math.max(12, (hovered / (points.length - 1)) * 100))}%` }}
+                    aria-live="polite"
                 >
                     <span className="font-mono font-semibold">{values[hovered].toFixed(sensor.decimals)}</span>{" "}
                     {sensor.unit} · {formatPointTime(points[hovered].recordedAt, hovered)}
@@ -97,6 +128,13 @@ export default function HistoryChart({ readings, sensorKey, sensor, detailed = f
                 </span>
                 <span>{sensor.max}</span>
             </div>
+
+            {detailed && (
+                <div className="flex justify-between border-t border-slate-800 pt-2 text-[11px] text-slate-400">
+                    <span>{startLabel}</span>
+                    <span>{endLabel}</span>
+                </div>
+            )}
         </div>
     );
 }

@@ -5,17 +5,18 @@ import HistoryChart from "../components/HistoryChart";
 import { evaluate, sensorConfig, sensorInfo } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
 import { useReadings } from "../hooks/useReadings";
-import { isMock } from "../lib/api";
+import { HISTORY_RANGES, isMock } from "../lib/api";
 
-const RANGES = [
-    { hours: 1, label: "1 h" },
-    { hours: 24, label: "24 h" },
-    { hours: 168, label: "7 d" }
-];
+const VALID_HOURS = HISTORY_RANGES.map((range) => range.hours);
 
 function parseRange(value) {
     const hours = Number(value);
-    return [1, 24, 168].includes(hours) ? hours : 24;
+    return VALID_HOURS.includes(hours) ? hours : 24;
+}
+
+function formatStep(stepMs) {
+    const minutes = Math.round(stepMs / 60000);
+    return minutes >= 60 ? `${minutes / 60} h` : `${minutes} min`;
 }
 
 function formatValue(value, sensor) {
@@ -52,13 +53,15 @@ function exportCsv(points, sensorKey) {
         const state = evaluate(sensorKey, point.value).state === "alert" ? "fuera_de_rango" : "en_rango";
         return `${point.recordedAt ?? ""},${point.value},${state}`;
     });
-    const content = ["hora,valor,estado", ...rows].join("\n");
+    const content = `\uFEFF${["hora,valor,estado", ...rows].join("\n")}`;
     const url = URL.createObjectURL(new Blob([content], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = `historial-${sensorKey}.csv`;
+    link.download = `historial-${sensorKey}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(url);
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 export default function SensorDetalle() {
@@ -111,7 +114,7 @@ export default function SensorDetalle() {
         );
     }
 
-    const rangeLabel = RANGES.find((range) => range.hours === hours).label;
+    const range = HISTORY_RANGES.find((item) => item.hours === hours);
 
     return (
         <AppLayout readings={readings}>
@@ -122,24 +125,24 @@ export default function SensorDetalle() {
                     </Link>
                     <h2 className="mt-2 text-xl font-semibold text-white">{sensor.title} · detalle</h2>
                     <p className="mt-1 text-xs text-slate-400">
-                        {isMock ? "Datos simulados" : "Datos reales"} · periodo {rangeLabel}
+                        {isMock ? "Datos simulados" : "Datos reales"} · periodo {range.label}
                     </p>
                 </div>
 
                 <div className="flex gap-1 rounded-lg border border-slate-800 bg-slate-900/40 p-1">
-                    {RANGES.map((range) => (
+                    {HISTORY_RANGES.map((item) => (
                         <button
-                            key={range.hours}
+                            key={item.hours}
                             type="button"
-                            onClick={() => setSearchParams({ range: String(range.hours) })}
-                            aria-pressed={hours === range.hours}
+                            onClick={() => setSearchParams({ range: String(item.hours) })}
+                            aria-pressed={hours === item.hours}
                             className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${
-                                hours === range.hours
+                                hours === item.hours
                                     ? "bg-cyan-500/15 text-cyan-200"
                                     : "text-slate-400 hover:bg-slate-800 hover:text-white"
                             }`}
                         >
-                            {range.label}
+                            {item.label}
                         </button>
                     ))}
                 </div>
@@ -159,13 +162,26 @@ export default function SensorDetalle() {
 
             {stats && (
                 <div className="space-y-5">
-                    <section className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+                    <section
+                        className={`rounded-lg border border-slate-800 bg-slate-900/40 p-4 ${
+                            history.stale ? "opacity-60" : ""
+                        }`}
+                        aria-busy={history.reloading}
+                    >
+                        {history.reloading && (
+                            <div className="mb-2 h-1 animate-pulse rounded bg-cyan-500/30 motion-reduce:animate-none" aria-hidden="true" />
+                        )}
                         <HistoryChart
                             readings={history.readings}
                             sensorKey={sensorKey}
                             sensor={sensor}
                             detailed
+                            startLabel={`hace ${range.label}`}
+                            endLabel="ahora"
                         />
+                        <p className="mt-2 text-[11px] text-slate-400">
+                            {range.points} muestras · cada {formatStep(range.stepMs)}
+                        </p>
                     </section>
 
                     <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -245,7 +261,7 @@ export default function SensorDetalle() {
                             <button
                                 type="button"
                                 onClick={() => exportCsv(points, sensorKey)}
-                                className="rounded-md border border-cyan-500/40 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:border-cyan-300 hover:bg-cyan-500/20 hover:text-white hover:shadow-lg hover:shadow-cyan-500/10 active:translate-y-px"
+                                className="rounded-md border border-cyan-500/40 px-3 py-1.5 text-[11px] font-semibold text-cyan-200 transition hover:border-cyan-300 hover:bg-cyan-500/20 hover:text-white hover:shadow-lg hover:shadow-cyan-500/10 active:translate-y-px cursor-pointer"
                             >
                                 Exportar CSV
                             </button>
