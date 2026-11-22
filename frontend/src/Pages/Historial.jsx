@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import AppLayout from "../components/AppLayout";
 import HistoryChart from "../components/HistoryChart";
+import Panel from "../components/Panel";
 import { sensorConfig } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -66,11 +67,12 @@ export default function Historial() {
 
             <div className="grid gap-5 xl:grid-cols-2">
                 {keys.map((key) => (
-                    <Link
+                    <Panel
                         key={key}
+                        as={Link}
                         to={`/historial/${key}?range=${hours}`}
                         aria-label={`Ver detalle de ${sensorConfig[key].title}`}
-                        className={`rounded-lg border border-slate-800 bg-slate-900/40 p-4 transition hover:border-cyan-500/50 hover:bg-slate-900/70 ${
+                        className={`transition hover:border-cyan-500/50 hover:bg-slate-900/70 ${
                             history.stale ? "opacity-60" : ""
                         }`}
                         aria-busy={history.reloading}
@@ -90,7 +92,7 @@ export default function Historial() {
                             />
                         </div>
                         <span className="mt-3 block text-[11px] text-cyan-300">Ver detalle →</span>
-                    </Link>
+                    </Panel>
                 ))}
             </div>
         </AppLayout>

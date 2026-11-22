@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import AppLayout from "../components/AppLayout";
 import HistoryChart from "../components/HistoryChart";
+import Panel from "../components/Panel";
 import { evaluate, sensorConfig, sensorInfo } from "../data/sensors";
 import { useHistory } from "../hooks/useHistory";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -171,10 +172,9 @@ export default function SensorDetalle() {
 
             {stats && (
                 <div className="space-y-5">
-                    <section
-                        className={`rounded-lg border border-slate-800 bg-slate-900/40 p-4 ${
-                            history.stale ? "opacity-60" : ""
-                        }`}
+                    <Panel
+                        as="section"
+                        className={history.stale ? "opacity-60" : ""}
                         aria-busy={history.reloading}
                     >
                         {history.reloading && (
@@ -191,7 +191,7 @@ export default function SensorDetalle() {
                         <p className="mt-2 text-[11px] text-slate-400">
                             {range.points} muestras · cada {formatStep(range.stepMs)}
                         </p>
-                    </section>
+                    </Panel>
 
                     <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                         {[
@@ -213,7 +213,7 @@ export default function SensorDetalle() {
                     </section>
 
                     <div className="grid gap-5 xl:grid-cols-2">
-                        <section className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+                        <Panel as="section">
                             <h3 className="text-sm font-semibold text-white">Eventos fuera de rango</h3>
                             {events.length === 0 ? (
                                 <p className="mt-3 text-xs text-emerald-300">
@@ -237,9 +237,9 @@ export default function SensorDetalle() {
                             {events.length > 0 && info && (
                                 <p className="mt-3 text-[11px] text-slate-400">{info.action}</p>
                             )}
-                        </section>
+                        </Panel>
 
-                        <section className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+                        <Panel as="section">
                             <h3 className="text-sm font-semibold text-white">Que mide este sensor</h3>
                             {info && (
                                 <dl className="mt-3 space-y-3 text-xs text-slate-300">
@@ -261,10 +261,10 @@ export default function SensorDetalle() {
                                     </div>
                                 </dl>
                             )}
-                        </section>
+                        </Panel>
                     </div>
 
-                    <section className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+                    <Panel as="section">
                         <div className="flex flex-wrap items-center justify-between gap-3">
                             <h3 className="text-sm font-semibold text-white">Ultimas lecturas</h3>
                             <button
@@ -305,7 +305,7 @@ export default function SensorDetalle() {
                                 </tbody>
                             </table>
                         </div>
-                    </section>
+                    </Panel>
                 </div>
             )}
         </AppLayout>

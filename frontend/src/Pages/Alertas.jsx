@@ -1,4 +1,5 @@
 import AppLayout from "../components/AppLayout";
+import Panel from "../components/Panel";
 import { ShieldIcon, DropletIcon, ThermometerIcon, BoltIcon } from "../components/Icons";
 import { evaluate, sensorConfig, simulation } from "../data/sensors";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -55,7 +56,7 @@ export default function Alertas() {
                     const count = readings.history[key].filter((value) => evaluate(key, value).state === "alert").length;
 
                     return (
-                        <div key={key} className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+                        <Panel key={key}>
                             <div className="flex items-center gap-2">
                                 <Icon className="size-4 text-cyan-300" />
                                 <span className="text-sm font-semibold text-white">{sensor.title}</span>
@@ -70,12 +71,12 @@ export default function Alertas() {
                             <p className="mt-2 text-[11px] text-slate-400">
                                 {count} evento{count === 1 ? "" : "s"} en la ventana actual
                             </p>
-                        </div>
+                        </Panel>
                     );
                 })}
             </div>
 
-            <section className="rounded-lg border border-slate-800 bg-slate-900/40 p-4">
+            <Panel as="section">
                 <h3 className="flex items-center gap-2 text-sm font-semibold text-white">
                     <ShieldIcon className="size-4 text-cyan-300" />
                     Ultimos eventos
@@ -102,7 +103,7 @@ export default function Alertas() {
                         })}
                     </ul>
                 )}
-            </section>
+            </Panel>
         </AppLayout>
     );
 }
