@@ -123,6 +123,7 @@ proyecto-iot/
 | `/historial` | Selector `1 h / 24 h / 7 d`; al tocar una tarjeta abre su detalle |
 | `/historial/:sensorKey?range=...` | Detalle del sensor: gráfica con crosshair, estadísticas, eventos, últimas lecturas y export CSV |
 | `/alertas` | Eventos derivados de los rangos óptimos |
+| `/ai-chat` | Proyección del asistente IA: interfaz y respuestas de ejemplo, sin modelo conectado |
 | `*` | Página 404 |
 
 La marca **AquaMagdalena** del sidebar vuelve a `/dashboard`; el icono de casa del header lleva al landing.
@@ -154,12 +155,13 @@ Ejemplo de lectura:
 - **Historial:** el dashboard mantiene una ventana deslizante de 24 lecturas cada 3 s (~72 s). La vista `/historial` pide series de 1 h, 24 h o 7 d al backend (o las simula) y el rango viaja en la URL, así que sobrevive al botón *atrás*.
 - **Rangos de referencia:** pH 7.0–7.6, temperatura 22–27 °C, conductividad 400–600 µS/cm. Son valores típicos de agua dulce, no la especificación final de los sensores.
 - **UI:** accesible (foco y título por ruta, cierre con Escape, estados de error con reintento) y con code-splitting; MapLibre solo carga en `/dashboard`.
+- **Asistente IA:** `/ai-chat` muestra una proyección interactiva con respuestas de ejemplo; no hay modelo conectado ni análisis de datos reales.
 - **Deploy:** Vercel sirve solo el frontend; configurar Root Directory `frontend`, build `npm run build` y output `dist/`. `frontend/vercel.json` reescribe las rutas SPA a `index.html`. El backend/PostgreSQL/Ollama deben desplegarse por separado.
 
 ## Pendiente
 
 - Cliente HTTP del ESP32 y definición de pines/firmware.
-- Integración de IA (`/api/chat` con Ollama/RAG), aún en diseño.
+- IA real (`/api/chat` con Ollama/RAG): `/ai-chat` ya muestra la proyección de interfaz; falta conectar el modelo.
 - Tests automatizados y despliegue del backend/PostgreSQL.
 
 ## Autor

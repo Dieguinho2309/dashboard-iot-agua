@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import AppLayout from "../components/AppLayout";
+import AiFab from "../components/AiFab";
 import { SensorCard } from "../components/SensorCard";
 import { sensorConfig } from "../data/sensors";
 import { usePageMeta } from "../hooks/usePageMeta";
@@ -43,6 +44,8 @@ export default function Dashboard() {
                     ))}
                 </div>
             </div>
+
+            <AiFab />
         </AppLayout>
     );
 }

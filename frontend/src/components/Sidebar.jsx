@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { Link, NavLink } from "react-router";
-import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon, ClockIcon, ShieldIcon } from "./Icons";
+import { WavesIcon, LayoutIcon, CloseIcon, CpuIcon, WifiIcon, ClockIcon, ShieldIcon, SparkIcon } from "./Icons";
 import { node } from "../data/sensors";
 import { isMock } from "../lib/api";
 
 const navItems = [
     { label: "Panel Principal", to: "/dashboard", icon: LayoutIcon },
     { label: "Historial", to: "/historial", icon: ClockIcon },
-    { label: "Alertas", to: "/alertas", icon: ShieldIcon }
+    { label: "Alertas", to: "/alertas", icon: ShieldIcon },
+    { label: "Asistente IA", to: "/ai-chat", icon: SparkIcon, badge: "Pronto" }
 ];
 
 export default function Sidebar({ open, onClose, live }) {
@@ -70,7 +71,7 @@ export default function Sidebar({ open, onClose, live }) {
                 <p className="px-5 pb-2 text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase">Navegación</p>
 
                 <nav className="flex-1 space-y-1 overflow-y-auto px-3">
-                    {navItems.map(({ label, to, icon: Icon }) => (
+                    {navItems.map(({ label, to, icon: Icon, badge }) => (
                         <NavLink
                             key={to}
                             to={to}
@@ -87,7 +88,12 @@ export default function Sidebar({ open, onClose, live }) {
                                 <>
                                     {isActive && <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-cyan-400" />}
                                     <Icon className={`size-5 shrink-0 ${isActive ? "text-cyan-300" : "text-slate-400"}`} />
-                                    {label}
+                                    <span className="truncate">{label}</span>
+                                    {badge && (
+                                        <span className="ml-auto rounded-full bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold tracking-wide text-amber-300 uppercase ring-1 ring-amber-500/30">
+                                            {badge}
+                                        </span>
+                                    )}
                                 </>
                             )}
                         </NavLink>

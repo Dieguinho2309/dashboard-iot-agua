@@ -91,6 +91,24 @@ export function ActivityIcon(props) {
     );
 }
 
+export function SparkIcon(props) {
+    return (
+        <Svg {...props}>
+            <path d="M12 3.2 13.8 9l5.8 1.8-5.8 1.8L12 18.4l-1.8-5.8L4.4 10.8 10.2 9Z" />
+            <path d="M19 16.5v3M17.5 18h3" />
+        </Svg>
+    );
+}
+
+export function SendIcon(props) {
+    return (
+        <Svg {...props}>
+            <path d="m21 3-8.5 18-2.2-6.3L4 12.5Z" />
+            <path d="M21 3 10.3 14.7" />
+        </Svg>
+    );
+}
+
 export function ShieldIcon(props) {
     return (
         <Svg {...props}>

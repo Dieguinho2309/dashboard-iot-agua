@@ -8,6 +8,7 @@ const Dashboard = lazy(() => import("./Pages/Dashboard"));
 const Historial = lazy(() => import("./Pages/Historial"));
 const SensorDetalle = lazy(() => import("./Pages/SensorDetalle"));
 const Alertas = lazy(() => import("./Pages/Alertas"));
+const AIChatPage = lazy(() => import("./Pages/AIChatPage"));
 
 function RouteFallback() {
     return (
@@ -27,6 +28,7 @@ export default function App() {
                     <Route path="/historial" element={<Historial />} />
                     <Route path="/historial/:sensorKey" element={<SensorDetalle />} />
                     <Route path="/alertas" element={<Alertas />} />
+                    <Route path="/ai-chat" element={<AIChatPage />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Suspense>
